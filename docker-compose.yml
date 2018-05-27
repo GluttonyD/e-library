@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  web:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+      - ./src:/www
+    links:
+      - php
+      - mariadb
+  php:
+    container_name: php
+    image: sadykh/php:latest
+    volumes:
+      - ./src:/www
+      - ./db:/var/lib/mysql
+    links:
+      - mariadb
+  mariadb:
+      container_name: db
+      image: mysql:latest
+      ports:
+        - "3306:3306"
+      expose:
+        - "3306"
+      environment:
+       - MYSQL_ROOT_PASSWORD=root
+       - MYSQL_USER=aritomo
+       - MYSQL_DATABASE=libraryDB
+       - MYSQL_PASSWORD=deathcutegirl
+      volumes:
+       - ./mysqldata:/var/lib/mysql
