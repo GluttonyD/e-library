@@ -12,9 +12,9 @@ class m180528_223040_foreign_key extends Migration
      */
     public function safeUp()
     {
-//        $this->addForeignKey('publication_to_link','link','publication_id','publication','id');
-//        $this->addForeignKey('author_to_link','link','author_id','author','id');
-//        $this->addForeignKey('publication_to_penname','publication_to_penname','publication_id','publication','id');
+        $this->addForeignKey('publication_to_link','link','publication_id','publication','id');
+        $this->addForeignKey('author_to_link','link','author_id','author','id');
+        $this->addForeignKey('publication_to_penname','publication_to_penname','publication_id','publication','id');
         $this->addForeignKey('penname_to_penname','publication_to_penname','penname_id','author_penname','id');
         $this->addForeignKey('author_to_penname','author_penname','author_id','author','id');
 

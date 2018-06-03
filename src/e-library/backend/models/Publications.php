@@ -36,7 +36,7 @@ class Publications extends Model
 
     public function rules(){
         return [
-            [['name','language','year'],'required'],
+            [['name','language','year','type'],'required'],
             ['edition','safe'],
             ['data_city','safe'],
             ['data_date','safe'],
@@ -49,7 +49,6 @@ class Publications extends Model
             ['scopus','safe'],
             ['index','safe'],
             ['wos','safe'],
-            ['type','safe'],
             [['file'],'file','extensions'=>'pdf','skipOnEmpty' => true],
         ];
     }
@@ -67,7 +66,8 @@ class Publications extends Model
             'doi' => 'Doi',
             'link' => 'Link',
             'year' => 'Год',
-            'language'=>'Язык'
+            'language'=>'Язык',
+            'type'=>'Тип публикации'
         ];
     }
 
@@ -93,6 +93,7 @@ class Publications extends Model
              */
             $this->authors_count=0;
             $publication=Publication::find()->where(['id'=>$publication_id])->one();
+//            VarDumper::dump($publication->authorPennames);
             $this->name=$publication->name;
             $this->edition=$publication->edition;
             foreach ($publication->authors as $item){
@@ -123,6 +124,7 @@ class Publications extends Model
     }
 
     public function addPublication($publication_id){
+        $author_order=0;
         if($this->validate()){
             if($publication_id){
                 /**
@@ -147,14 +149,15 @@ class Publications extends Model
                 $publication->save();
             }
             foreach ($this->authors as $item) {
-                self::addAuthor($item,$publication->id);
+                self::addAuthor($item,$publication->id,$author_order);
+                $author_order++;
             }
             return true;
         }
         return false;
     }
 
-    public static function addAuthor($item,$publication_id){
+    public static function addAuthor($item,$publication_id,$author_order){
         /**
          * @var Author $author
          * @var AuthorPenname $penname
@@ -177,6 +180,7 @@ class Publications extends Model
                 return true;
             }
         }
+        $author->save();
         $link = new Link();
         $link->createLink($author->id,$publication_id);
         return true;

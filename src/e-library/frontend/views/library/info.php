@@ -97,4 +97,5 @@ switch ($model->type){
             <?php } ?>
             <?php } ?>
         </div>
+        <a href="/library/index" class="btn btn-primary">На главную</a>
     </div>

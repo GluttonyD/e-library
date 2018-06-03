@@ -21,14 +21,15 @@ class Link extends \yii\db\ActiveRecord
             $isExist->andWhere(['penname_id'=>$penname_id]);
         }
         $isExist=$isExist->one();
-        if(!$isExist) {
+        if($isExist){
+            $isExist->delete();
+        }
             $this->author_id = $author_id;
             $this->publication_id = $publication_id;
             if($penname_id){
                 $this->penname_id=$penname_id;
             }
             $this->save();
-        }
     }
 
     /**

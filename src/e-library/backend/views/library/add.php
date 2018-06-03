@@ -180,6 +180,6 @@ if ($model->name) {
             <input class="btn btn-info" type="button" id="delete-fields" value="Убрать автора">
         </p>
         <?= ($modify_id)? Html::submitButton('Сохранить изменения', ['class' => 'btn btn-primary', 'name' => 'login-button']): Html::submitButton('Добавить публикацию', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-
+        <a href="/library/index" class="btn btn-primary">Отмена</a>
     </div>
 </form>

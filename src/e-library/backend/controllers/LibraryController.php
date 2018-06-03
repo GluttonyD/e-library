@@ -38,7 +38,8 @@ class LibraryController extends Controller
     }
 
     public function actionIndex($orderBy=null){
-        $publications=Publication::find()->with('authors')->with('authorPennames');
+        $publications=Publication::find();
+//        $publications=Publication::find()->joinWith('authors')->orderBy('link.id');
         $pages=new Pagination(['totalCount'=>$publications->count(),'pageSize'=>10]);
         $model=$publications->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render('index',[
@@ -84,10 +85,11 @@ class LibraryController extends Controller
 
         $publication=Publication::find()->where(['id'=>$publication_id])->one();
         $links=\common\models\Link::find()->where(['publication_id'=>$publication_id])->all();
-        $publication->delete();
         foreach ($links as $link){
             $link->delete();
         }
+        $publication->delete();
+
         $this->redirect('/library/index');
     }
 

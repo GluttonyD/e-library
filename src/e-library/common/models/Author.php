@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property int $added
  */
 class Author extends \yii\db\ActiveRecord
 {
@@ -27,6 +28,7 @@ class Author extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'string', 'max' => 255],
+            [['added'],'integer']
         ];
     }
 
@@ -39,5 +41,9 @@ class Author extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
+    }
+
+    public function getOrderAuthors(){
+        return $this->hasMany(Link::className(),['author_id'=>'id']);
     }
 }

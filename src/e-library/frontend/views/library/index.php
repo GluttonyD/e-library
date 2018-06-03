@@ -11,7 +11,7 @@ use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
 ?>
-<p><a class="btn btn-info" href="/library/add-publication">Добавить публикацию</a><a class="btn btn-info"
+<p><a class="btn btn-info"                                                      style="margin-left: 10px"
                                                                                      href="/library/author-index">Список
         авторов</a></p>
 <form id="search-form" method="post" action="/library/search-publications">

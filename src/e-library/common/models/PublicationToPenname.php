@@ -45,19 +45,21 @@ class PublicationToPenname extends \yii\db\ActiveRecord
         ];
     }
 
-    public function createLink($author_id,$publication_id,$penname_id=null){
+    public function createLink($author_id, $publication_id, $penname_id = null)
+    {
         $isExist=self::find()->where(['author_id'=>$author_id])->andWhere(['publication_id'=>$publication_id]);
         if($penname_id){
             $isExist->andWhere(['penname_id'=>$penname_id]);
         }
         $isExist=$isExist->one();
-        if(!$isExist) {
-            $this->author_id = $author_id;
-            $this->publication_id = $publication_id;
-            if($penname_id){
-                $this->penname_id=$penname_id;
-            }
-            $this->save();
+        if($isExist){
+            $isExist->delete();
         }
+        $this->author_id = $author_id;
+        $this->publication_id = $publication_id;
+        if($penname_id){
+            $this->penname_id=$penname_id;
+        }
+        $this->save();
     }
 }

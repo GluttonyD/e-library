@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $author_id
  * @property string $penname
+ * @property int $added
  */
 class AuthorPenname extends \yii\db\ActiveRecord
 {
@@ -29,6 +30,7 @@ class AuthorPenname extends \yii\db\ActiveRecord
         return [
             [['author_id'], 'integer'],
             [['penname'], 'string', 'max' => 255],
+            [['added'],'integer']
         ];
     }
 
@@ -42,5 +44,9 @@ class AuthorPenname extends \yii\db\ActiveRecord
             'author_id' => 'Author ID',
             'penname' => 'Penname',
         ];
+    }
+
+    public function getOrderPennames(){
+        return $this->hasMany(PublicationToPenname::className(),['penname_id'=>'id']);
     }
 }

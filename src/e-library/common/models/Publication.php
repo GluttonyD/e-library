@@ -4,6 +4,7 @@ namespace common\models;
 
 use app\models\Publications;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\VarDumper;
 
 /**
@@ -94,6 +95,10 @@ class Publication extends \yii\db\ActiveRecord
     public function getStandardName()
     {
         $standard_name = '';
+//        $tmp=self::find()->joinWith('authors')->orderBy('link.id')->one();
+//        VarDumper::dump($this);
+//        $authors=$this->sortAurhors();
+//        $pennames=$this->sortPennames();
         if ($this->language == 'eng') {
             foreach ($this->authors as $author)
                 $standard_name = $standard_name . $author['name'] . ', ';
@@ -104,10 +109,10 @@ class Publication extends \yii\db\ActiveRecord
             $standard_name.=" ";
             $standard_name .= '"';
             $standard_name .= $this->name;
-            $standard_name .= '."';
+            $standard_name .= '". ';
             $standard_name .= $this->edition;
             if ($this->data_city) {
-                $standard_name .= ',' . $this->data_city. ":";
+                $standard_name .= ', ' . $this->data_city. ": ";
             }
             if ($this->data_date) {
                 $standard_name .= $this->data_date;
@@ -115,9 +120,9 @@ class Publication extends \yii\db\ActiveRecord
             if ($this->data_publication) {
                 $standard_name .=$this->data_publication;
             }
-            $standard_name.='. - '.$this->year;
+            $standard_name.='. - '.$this->year." ";
             if ($this->data_number) {
-                $standard_name .= '' . $this->data_number . ' ';
+                $standard_name .= '№ ' . $this->data_number . ' ';
             }
             if ($this->data_pages) {
                 $standard_name .= ' p.' . $this->data_pages;
@@ -187,13 +192,54 @@ class Publication extends \yii\db\ActiveRecord
         return $standard_name;
     }
 
+    public function sortAurhors(){
+        /**
+         * @var Link $link
+         * @var Author $author
+         */
+        $links=Link::find()->where(['publication_id'=>$this->id])->orderBy('id')->all();
+        $authors=array();
+        foreach ($links as $link){
+            $author=Author::find()->where(['id'=>$link->author_id])->one();
+            array_push($authors,$author->name);
+        }
+        return $authors;
+    }
+    public function sortPennames(){
+        /**
+         * @var PublicationToPenname $link
+         * @var AuthorPenname $penname
+         */
+        $links=PublicationToPenname::find()->where(['publication_id'=>$this->id])->orderBy('id')->all();
+        $pennames=array();
+        foreach($links as $link){
+            $penname=AuthorPenname::find()->where(['id'=>$link->penname_id])->one();
+            array_push($pennames,$penname->penname);
+        }
+        return $pennames;
+    }
+
+    public function getOrderAuthors(){
+        return $this->hasMany(Link::className(),['publication_id'=>'id']);
+    }
+
+    public function getOrderPennames(){
+        return $this->hasMany(PublicationToPenname::className(),['publication_id'=>'id']);
+    }
+
     public function getAuthors()
     {
-        return $this->hasMany(Author::className(), ['id' => 'author_id'])->viaTable('link', ['publication_id' => 'id']);
+        return $this->hasMany(Author::className(), ['id' => 'author_id'])->via('orderAuthors')
+            ->joinWith('orderAuthors')
+            ->orderBy('link.id')
+            ->andWhere(['link.publication_id'=>$this->id]);
     }
 
     public function getAuthorPennames()
     {
-        return $this->hasMany(AuthorPenname::className(), ['id' => 'penname_id'])->viaTable('publication_to_penname', ['publication_id' => 'id']);
+        return $this->hasMany(AuthorPenname::className(), ['id' => 'penname_id'])->via('orderPennames')
+            ->joinWith('orderPennames')
+            ->orderBy('publication_to_penname.id')
+            ->andWhere(['publication_to_penname.publication_id'=>$this->id]);
     }
 }
