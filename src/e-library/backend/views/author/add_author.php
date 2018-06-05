@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $config=array();
-array_push($config, '/library/add-author');
+array_push($config, '/author/add-author');
 ($author_id) ? ($config['author_id'] = $author_id) : null;
 ?>
 

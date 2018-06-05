@@ -97,13 +97,13 @@ class Publication extends \yii\db\ActiveRecord
         $standard_name = '';
 //        $tmp=self::find()->joinWith('authors')->orderBy('link.id')->one();
 //        VarDumper::dump($this);
-//        $authors=$this->sortAurhors();
-//        $pennames=$this->sortPennames();
+        $authors=$this->sortAurhors();
+        $pennames=$this->sortPennames();
         if ($this->language == 'eng') {
-            foreach ($this->authors as $author)
-                $standard_name = $standard_name . $author['name'] . ', ';
-            foreach ($this->authorPennames as $author)
-                $standard_name = $standard_name . $author['penname'] . ', ';
+//            foreach ($authors as $author)
+//                $standard_name = $standard_name . $author . ', ';
+            foreach ($pennames as $author)
+                $standard_name = $standard_name . $author . ', ';
             $standard_name=trim($standard_name);
             $standard_name=substr($standard_name,0,-1);
             $standard_name.=" ";
@@ -144,10 +144,10 @@ class Publication extends \yii\db\ActiveRecord
             }
         }
         if ($this->language == 'rus') {
-            foreach ($this->authors as $author)
-                $standard_name = $standard_name . $author['name'] . ', ';
-            foreach ($this->authorPennames as $author)
-                $standard_name = $standard_name . $author['penname'] . ', ';
+//            foreach ($authors as $author)
+//                $standard_name = $standard_name . $author . ', ';
+            foreach ($pennames as $author)
+                $standard_name = $standard_name . $author . ', ';
             $standard_name=trim($standard_name);
             $standard_name=substr($standard_name,0,-1);
             $standard_name.=" ";
@@ -233,6 +233,8 @@ class Publication extends \yii\db\ActiveRecord
             ->joinWith('orderAuthors')
             ->orderBy('link.id')
             ->andWhere(['link.publication_id'=>$this->id]);
+//        return $this->hasMany(Author::className(), ['id' => 'author_id'])->viaTable('link',['publication_id'=>'id']);
+
     }
 
     public function getAuthorPennames()
@@ -241,5 +243,6 @@ class Publication extends \yii\db\ActiveRecord
             ->joinWith('orderPennames')
             ->orderBy('publication_to_penname.id')
             ->andWhere(['publication_to_penname.publication_id'=>$this->id]);
+        //        return $this->hasMany(AuthorPenname::className(), ['id' => 'penname_id'])->viaTable('publication_to_penname',['publication_id'=>'id']);
     }
 }

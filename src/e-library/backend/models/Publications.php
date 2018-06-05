@@ -96,11 +96,11 @@ class Publications extends Model
 //            VarDumper::dump($publication->authorPennames);
             $this->name=$publication->name;
             $this->edition=$publication->edition;
-            foreach ($publication->authors as $item){
-                $this->authors[$this->authors_count]['name']=$item['name'];
-                $this->authors[$this->authors_count]['id']=$item['id'];
-                $this->authors_count++;
-            }
+//            foreach ($publication->authors as $item){
+//                $this->authors[$this->authors_count]['name']=$item['name'];
+//                $this->authors[$this->authors_count]['id']=$item['id'];
+//                $this->authors_count++;
+//            }
             foreach ($publication->authorPennames as $item){
                 $this->authors[$this->authors_count]['name']=$item['penname'];
                 $this->authors[$this->authors_count]['id']=$item['id'];
@@ -131,6 +131,14 @@ class Publications extends Model
                  * @var Publication $publication
                  */
                 $publication=Publication::find()->where(['id'=>$publication_id])->one();
+                $links=Link::find()->where(['publication_id'=>$publication->id])->all();
+                $penname_links=PublicationToPenname::find()->where(['publication_id'=>$publication->id])->all();
+//                foreach ($links as $link){
+//                    $link->delete();
+//                }
+                foreach ($penname_links as $link){
+                    $link->delete();
+                }
             }
             else {
                 $publication = new Publication();
@@ -169,8 +177,14 @@ class Publications extends Model
                 $author = new Author();
                 $author->name = $item['name'];
                 $author->save();
+                $penname=new AuthorPenname();
+                $penname->penname=$item['name'];
+                $penname->author_id=$author->id;
+                $penname->save();
                 $link = new Link();
                 $link->createLink($author->id,$publication_id);
+                $penname_link=new PublicationToPenname();
+                $penname_link->createLink($author->id,$publication_id,$penname->id);
                 return true;
             }
             else{
@@ -183,6 +197,8 @@ class Publications extends Model
         $author->save();
         $link = new Link();
         $link->createLink($author->id,$publication_id);
+        $penname_link=new PublicationToPenname();
+        $penname_link->createLink($author->id,$publication_id,$penname->id);
         return true;
     }
 

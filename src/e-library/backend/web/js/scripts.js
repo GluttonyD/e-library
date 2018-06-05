@@ -29,7 +29,7 @@ $(document).on("click", "#delete-fields", function (e) {
     if (current_author > 0)
         current_author--;
     $.ajax({
-        url: '/library/author-erase', // Url to which the request is send
+        url: '/author/author-erase', // Url to which the request is send
         type: "GET",             // Type of request to be send, called as method
         data: {author_id: author_id, publication_id: publication_id}, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
         cache: false,             // To unable request pages to be cached
@@ -42,7 +42,7 @@ $(document).on("click", "#delete-fields", function (e) {
 
 $(function () {
     $('#publication-edition').autocomplete({
-        serviceUrl: '/library/autocomplete-edition',
+        serviceUrl: '/autocomplete/autocomplete-edition',
         minLength: 2,
         lookupLimit: 10,
         type: 'GET',
@@ -64,7 +64,7 @@ $(document).ready(function () {
     $('#authors').on('click', '.author', function () {
         $(function () {
             $('.author').autocomplete({
-                serviceUrl: '/library/autocomplete-authors',
+                serviceUrl: '/autocomplete/autocomplete-authors',
                 minLength: 2,
                 lookupLimit: 10,
                 type: 'GET',
@@ -109,13 +109,12 @@ $(document).on("click", "#remove-penname", function (e) {
     e.preventDefault();
     var id = current_penname - 1;
     var penname_id = $('#' + id).data('id');
-    // var author_id=$('#pennames').data('author_id');
     $('div#' + id).remove();
     if (current_penname > 0)
         current_penname--;
     console.log(penname_id);
     $.ajax({
-        url: '/library/penname-erase', // Url to which the request is send
+        url: '/author/penname-erase', // Url to which the request is send
         type: "GET",             // Type of request to be send, called as method
         data: {penname_id: penname_id}, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
         cache: false,             // To unable request pages to be cached
@@ -145,7 +144,6 @@ $(document).ready(function () {
             processData: false,        // To send DOMDocument or non processed data file it is set to false
             success: function (data)   // A function to be called if request succeeds
             {
-                // console.log(data[0]);
                 var i;
                 var input='<b>Результаты поиска :</b>';
                 console.log(data);
@@ -170,7 +168,6 @@ $(document).ready(function () {
                             '<a href="/library/delete-publication?publication_id=' + data[i]['id'] + '" class="glyphicon glyphicon-remove"></a>' +
                             '</div>';
                         input = input + '</div>';
-                        // console.log(input);
                     }
                 }
                 console.log(input);

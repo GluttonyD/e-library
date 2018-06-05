@@ -65,6 +65,7 @@ class Authors extends Model
                 }
                 $author->name=$this->name;
                 $author->save();
+                self::addPenname($author->name,$author->id);
 //                return true;
             }
             if($this->pennames[0]){

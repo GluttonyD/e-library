@@ -14,7 +14,7 @@ use yii\helpers\Html;
 <p><a class="btn btn-info" href="/library/add-publication">Добавить публикацию</a>
     <a class="btn btn-info"
        style="margin-left: 10px"
-       href="/library/author-index">Список
+       href="/author/author-index">Список
         авторов</a></p>
 <form id="search-form" method="post" action="/library/search-publications">
     <?= yii\helpers\Html:: hiddenInput(\Yii:: $app->getRequest()->csrfParam, \Yii:: $app->getRequest()->getCsrfToken(), []) ?>
