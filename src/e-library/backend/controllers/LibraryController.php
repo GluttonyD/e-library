@@ -85,7 +85,11 @@ class LibraryController extends Controller
 
         $publication=Publication::find()->where(['id'=>$publication_id])->one();
         $links=\common\models\Link::find()->where(['publication_id'=>$publication_id])->all();
+        $pennameLink=PublicationToPenname::find()->where(['publication_id'=>$publication_id])->all();
         foreach ($links as $link){
+            $link->delete();
+        }
+        foreach ($pennameLink as $link){
             $link->delete();
         }
         $publication->delete();

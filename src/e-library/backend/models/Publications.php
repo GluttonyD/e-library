@@ -133,9 +133,6 @@ class Publications extends Model
                 $publication=Publication::find()->where(['id'=>$publication_id])->one();
                 $links=Link::find()->where(['publication_id'=>$publication->id])->all();
                 $penname_links=PublicationToPenname::find()->where(['publication_id'=>$publication->id])->all();
-//                foreach ($links as $link){
-//                    $link->delete();
-//                }
                 foreach ($penname_links as $link){
                     $link->delete();
                 }
