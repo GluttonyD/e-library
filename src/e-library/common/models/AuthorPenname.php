@@ -11,6 +11,7 @@ use Yii;
  * @property int $author_id
  * @property string $penname
  * @property int $added
+ * @property int $original
  */
 class AuthorPenname extends \yii\db\ActiveRecord
 {
@@ -30,7 +31,8 @@ class AuthorPenname extends \yii\db\ActiveRecord
         return [
             [['author_id'], 'integer'],
             [['penname'], 'string', 'max' => 255],
-            [['added'],'integer']
+            [['added'],'integer'],
+            [['original'],'integer'],
         ];
     }
 

@@ -11,7 +11,7 @@ use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
 ?>
-<p><a class="btn btn-info" href="/library/index" style="margin-right: 15px" >Список публикаций</a><a class="btn btn-info" href="/library/add-author" >Добавить автора</a></p>
+<p><a class="btn btn-info" href="/library/index" style="margin-right: 15px" >Список публикаций</a><a class="btn btn-info" href="/author/add-author" >Добавить автора</a></p>
 <form method="post" action="/author/author-search" class="form-inline">
     <?= yii\helpers\Html:: hiddenInput(\Yii:: $app->getRequest()->csrfParam, \Yii:: $app->getRequest()->getCsrfToken(), []) ?>
     <div class="form-group">

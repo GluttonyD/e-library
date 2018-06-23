@@ -180,6 +180,7 @@ class Publications extends Model
                 $penname=new AuthorPenname();
                 $penname->penname=$item['name'];
                 $penname->author_id=$author->id;
+                $penname->original=1;
                 $penname->save();
                 $link = new Link();
                 $link->createLink($author->id,$publication_id);
